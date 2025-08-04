@@ -1,0 +1,20 @@
+{
+  "name": "dhtmlx-grid-ai-backend",
+  "version": "1.0.0",
+  "description": "Backend for AI-powered DHTMLX Grid analysis",
+  "main": "backend/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "openai": "^4.47.1",
+    "p-map": "^7.0.3",
+    "socket.io": "^4.7.5"
+  }
+}
