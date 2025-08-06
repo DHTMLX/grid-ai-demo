@@ -1,4 +1,3 @@
-
 # AI-Powered Review Analysis with DHTMLX Grid
 
 A full-stack web application that uses an AI language model to analyze user reviews in a DHTMLX Grid. The application determines sentiment, extracts relevant tags, and provides a summary for each review, updating the grid in real-time, row-by-row.
@@ -8,6 +7,7 @@ A full-stack web application that uses an AI language model to analyze user revi
 - **Real-time, Row-by-Row Analysis:** Click "Analyze All Reviews" to see the grid populate with AI-generated data one row at a time, providing a live-updating experience.
 - **On-the-Fly Editing:** Edit a review directly in the grid, and it will be instantly re-analyzed.
 - **Clear Sentiment Visualization:** Uses icons (👍, 👎, 🤔) for an at-a-glance understanding of the sentiment.
+- **Reliable & Scalable:** The backend is built to handle multiple simultaneous requests to the AI service without hitting rate limits, ensuring stable operation.
 
 ## AI Service
 
@@ -24,16 +24,21 @@ npm install
 ```
 
 ### Set up environment variables:
-Create a new file named `.env` inside the `dhtmlx-grid-ai` directory. This file will hold your secret API key and the base URL for the AI service.
-
+Create a new file named `.env` inside the `dhtmlx-grid-ai` directory by copying from `env.sample`. This file holds your secret keys and configuration.
 
 📄 `dhtmlx-grid-ai/.env`
 ```ini
+# --- OpenAI API Configuration ---
 OPENAI_API_KEY=sk-YourSecretApiKeyGoesHere
 OPENAI_BASE_URL=https://api.openai.com/v1
+
+# --- Security Configuration ---
+CORS_ALLOWED_ORIGINS=http://localhost:3001,http://127.0.0.1:3001,http://localhost:5500,http://127.0.0.1:5500
 ```
 
-Replace `sk-YourSecretApiKeyGoesHere` with your actual API key.
+-   **`OPENAI_API_KEY`**: (Required) Your secret API key for the AI service.
+-   **`OPENAI_BASE_URL`**: The API endpoint for the AI service. Can be changed to use a proxy or a different provider compatible with the OpenAI API.
+-   **`CORS_ALLOWED_ORIGINS`**: A crucial security setting. This is a comma-separated list of web addresses allowed to connect to your backend server. For production, you **must** change this to your public frontend's URL (e.g., `https://myapp.com`).
 
 ### Run the Application
 
@@ -56,23 +61,21 @@ You should see the application, ready for analysis!
 
 ## How It Works
 
-The application uses a real-time, event-driven architecture to provide a seamless user experience.
+The application uses a real-time, event-driven architecture to provide a seamless and reliable user experience.
 
 1.  **Initiation:** The user clicks the "Analyze All Reviews" button on the frontend.
-2.  **Sequential Requests:** The frontend JavaScript loops through each grid row and sends a `analyze_single_review` event to the backend via Socket.IO for **each row**.
-3.  **Backend Processing:** The Node.js server receives the request for a single review.
-4.  **AI Call:** The server sends the review text to the AI service defined in the `.env` file.
-5.  **AI Response:** The AI analyzes the text and returns the sentiment, tags, and summary.
-6.  **Callback to Client:** The server immediately sends the result back to the specific client using a Socket.IO callback.
-7.  **Grid Update:** The frontend receives the analysis for that one row and instantly updates the grid.
-8.  **Loop Continues:** The frontend proceeds to the next row in the list, creating the live, row-by-row update effect.
+2.  **Bulk Request:** The frontend gathers all reviews that need analysis and sends them to the server as a single list via a `analyze_bulk_reviews` Socket.IO event.
+3.  **Concurrent Backend Processing:** The Node.js server receives the list. Using the `p-map` library, it starts processing reviews concurrently (with a configurable limit, e.g., 5 at a time) by making asynchronous calls to the AI service.
+4.  **Streaming Results:** As soon as the analysis for **any single review** is complete, the server immediately sends the result for that specific row back to the client using a `review_analyzed` event. This happens without waiting for the entire batch to finish.
+5.  **Instant Grid Update:** The frontend receives the analysis for that one row and instantly updates its data in the grid.
+6.  **Completion:** This process continues, creating a live, row-by-row update effect. Once all reviews have been processed, the server emits a final `bulk_analysis_finished` event to signal that the entire job is done.
 
 ## Deployment
 
 This application is ready to be deployed on any service that supports Node.js, such as Render, Heroku, or Vercel.
 
 **Key deployment steps:**
-- **Do not** upload your `.env` file. Use the hosting provider's "Environment Variables" section to set `OPENAI_API_KEY` and `OPENAI_BASE_URL`.
+- **Do not** upload your `.env` file. Use the hosting provider's "Environment Variables" section to set `OPENAI_API_KEY`, `OPENAI_BASE_URL`, and `CORS_ALLOWED_ORIGINS`.
 - The `Root Directory` should be left blank (or set to /).
 - The `Start Command` should be `npm start`.
 
