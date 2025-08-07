@@ -17,18 +17,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.19.0'
+          cache: 'npm' # Кэширование node_modules
 
       # Install dependencies
       - name: Install Dependencies
         run: npm install
-
-      # Build the frontend
-      - name: Build Frontend
-        run: |
-          cd frontend
-          npm run build
-        env:
-          CORS_ALLOWED_ORIGINS: ${{ secrets.CORS_ALLOWED_ORIGINS }}
 
       # Set up Docker Buildx
       - name: Set up Docker Buildx
@@ -54,8 +47,3 @@ jobs:
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             OPENAI_BASE_URL=${{ secrets.OPENAI_BASE_URL }}
             CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }}
-
-      # Trigger deployment webhook
-      - name: Trigger Deployment
-        run: |
-          curl "https://dhtmlx.com/hooks/restart-docker?token=${{ secrets.RESTART_TOKEN }}&project=grid-ai-demo-next"
