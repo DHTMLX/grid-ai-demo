@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DHTMLX Grid + AI Analysis</title>
+    <link rel="stylesheet" href="https://cdn.dhtmlx.com/suite/pro/edge/suite.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Customer Review Analysis with AI</h1>
+        <p>Click the button to analyze all reviews or simply edit a cell in the "Review" column for instant analysis.
+        </p>
+        <div id="controls">
+            <button id="analyze-btn">✨ Analyze all reviews</button>
+            <span id="loader">Analyzing...</span>
+        </div>
+        <div id="grid" class="dhx_grid-container"></div>
+    </div>
+
+    <div class="dhx_demo-footer">
+        <div class="dhx_layout-cell-content">
+            <a href="https://dhtmlx.com/docs/products/demoApps/dhtmlxExam/" title="Previous Demo" class="dhx_slider-btn dhx_slider-btn--prev">
+                <svg width="15" height="15" viewBox="0 0 15 15">
+                    <path
+                        d="M0.820312 6.67969V8.32031H10.8203L6.25 12.9297L7.42188 14.1016L14.0234 7.5L7.42188 0.898438L6.25 2.07031L10.8203 6.67969H0.820312Z"
+                        fill="#fff"></path>
+                </svg>
+            </a>
+            <a href="https://docs.dhtmlx.com/docs/demo/form-builder-ai/" title="Next Demo" class="dhx_slider-btn dhx_slider-btn--next">
+                <svg width="15" height="15" viewBox="0 0 15 15">
+                    <path
+                        d="M0.820312 6.67969V8.32031H10.8203L6.25 12.9297L7.42188 14.1016L14.0234 7.5L7.42188 0.898438L6.25 2.07031L10.8203 6.67969H0.820312Z"
+                        fill="#fff"></path>
+                </svg>
+            </a>
+            <div class="dhx_demo-footer-text">
+                <h1>DHTMLX Grid with AI Demo.</h1>
+                <p>Transform unstructured text into actionable insights with<a
+                        href="https://dhtmlx.com/docs/products/dhtmlxGrid/" target="_blank">JS Grid</a> and and OpenAI
+                    or any other LLM.
+                    <!-- Learn the secrets of AI integration in our <a href="javascript:void(0);" target="_blank">blog post</a>.-->
+                </p>
+            </div>
+            <a href="https://github.com/DHTMLX/grid-ai-demo" target="_blank" class="dhx_sample-btn dhx_sample-btn--cta">View on GitHub</a>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.dhtmlx.com/suite/pro/edge/suite.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
